@@ -11,12 +11,12 @@ class Consumer:
     def evaluate_beer(self, beer):
         # value of money
         # range = 0, 100
-        vom = math.sqrt(10000 - math.pow((abs(self.affluence - beer.cost)),2))
+        vom = pow((self.affluence + beer.cost) / 100, 2)
         # value of taste
         # same reasoning as vom, closer the values, the better it is.
         vot = math.sqrt(10000 - math.pow((abs(self.taste - beer.taste)),2))
         # value of effectiveness
         voe = 100 * (self.drunkenness + beer.effectiveness / (beer.effectiveness+0.01))
 
-        final_score = math.sqrt(vom + vot + voe)
-        return final_score
+        final_score = math.sqrt(vom)
+        return final_score   

@@ -4,11 +4,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 INITIAL_BEER_POPULATION = 10
-CONSUMER_POPULATION = 50
-MATING_POOL_SIZE = 5 # N best beers per cycle
+CONSUMER_POPULATION = 20
+MATING_POOL_SIZE = 3 # N best beers per cycle
 WORST_PERFORMER_DISCARD = 0.5
 CROSSOVER_CHANCE = 0.5
-MUTATE_CHANCE = 0.05
+MUTATE_CHANCE = 0.03
 
 def create_consumers(n):
     consumers = []

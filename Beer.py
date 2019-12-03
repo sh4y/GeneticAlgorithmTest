@@ -23,16 +23,23 @@ class Beer:
         # if change >= 0.5, crossover keeps gene as base
         traits = []
         for x in range(len(chances)):
-            if chances[x] >= 0.5:
+            min_trait = min(beer_traits[x], other_beer_traits[x]) #x1
+            max_trait = max(beer_traits[x], other_beer_traits[x]) #x2
+
+            boundary_start = min_trait - 0.5 * (max_trait-min_trait)
+            boundary_end = max_trait + 0.5 * (max_trait-min_trait)
+
+            traits.append(random.uniform(boundary_start, boundary_end))
+            '''if chances[x] >= 0.5:
                 base_value = beer_traits[x]
-                modification = random.uniform(-(base_value // 20), (base_value // 20))
+                modification =
                 new_value = base_value + modification
                 traits.append(new_value)
             else:
                 base_value = other_beer_traits[x]
                 modification = random.uniform(-(base_value // 20), (base_value // 20))
                 new_value = base_value + modification
-                traits.append(new_value)
+                traits.append(new_value)'''
 
         crossover_beer = Beer()
         crossover_beer.update_beer(traits[0], traits[1], traits[2])
