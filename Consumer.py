@@ -14,9 +14,9 @@ class Consumer:
         vom = pow((self.affluence + beer.cost) / 100, 2)
         # value of taste
         # same reasoning as vom, closer the values, the better it is.
-        vot = math.sqrt(10000 - math.pow((abs(self.taste - beer.taste)),2))
+        vot = math.sqrt(250000 - math.pow((abs(self.taste - beer.taste)), 2))
         # value of effectiveness
-        voe = 100 * (self.drunkenness + beer.effectiveness / (beer.effectiveness+0.01))
+        voe = 100 * (self.drunkenness + beer.effectiveness / (self.drunkenness + 0.01))
 
-        final_score = math.sqrt(vom)
-        return final_score   
+        final_score = math.sqrt(vom + voe + vot)
+        return final_score

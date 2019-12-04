@@ -47,7 +47,7 @@ class Beer:
 
     def mutate(self, chance):
         if random.random() <= chance:
-            values = [random.uniform(0, 40), random.uniform(0, 40), random.uniform(0, 40)]
+            values = [random.uniform(0, 0.5 * self.effectiveness), random.uniform(0, 0.5 * self.cost), random.uniform(0, 0.5 * self.taste)]
             self.effectiveness += random.choice([-1,1]) * values[0]
             self.cost += random.choice([-1,1]) * values[1]
             self.taste += random.choice([-1,1]) * values[2]

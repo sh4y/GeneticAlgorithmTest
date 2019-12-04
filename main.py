@@ -4,11 +4,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 INITIAL_BEER_POPULATION = 10
-CONSUMER_POPULATION = 20
-MATING_POOL_SIZE = 3 # N best beers per cycle
-WORST_PERFORMER_DISCARD = 0.5
+CONSUMER_POPULATION = 100
+MATING_POOL_SIZE = 4 # N best beers per cycle
+WORST_PERFORMER_DISCARD = 0.3
 CROSSOVER_CHANCE = 0.5
-MUTATE_CHANCE = 0.03
+MUTATE_CHANCE = 0.01
+CONVERGENCE_REQUIREMENT = 100
 
 def create_consumers(n):
     consumers = []
@@ -66,7 +67,7 @@ def sec_performer_mating(mating_pool ,beers):
 def worst_performer_mating(best_beers_indices, beers):
     children = []
     worst_performer = beers[best_beers_indices[len(best_beers_indices) - 1]]
-    if random.random() <= 0.3:
+    if random.random() <= 0.1:
         random_beer = random.choice(beers)
         child = worst_performer.crossover(random_beer)
         children.append(child)
@@ -87,8 +88,20 @@ def create_children(beers, best_beers_indices):
     children = children + worst_performer_mating(best_beers_indices, beers)
     return children
 
+def mutate_children(children):
+    for child in children:
+        child.mutate(MUTATE_CHANCE)
+
 def average_fitness(beer_scores):
     return np.mean(beer_scores)
+
+def converged(scores):
+    last_n_scores = scores[-CONVERGENCE_REQUIREMENT:]
+    stdev = np.std(last_n_scores)
+    if (np.median(last_n_scores) + stdev < np.max(last_n_scores)):
+        return False
+    else:
+        return True
 
 def plot(array):
     plt.figure()
@@ -108,11 +121,14 @@ for i in range(5000):
     best_beers_indices = sorted(np.argpartition(beer_scores, -len(beer_scores))[-len(beer_scores):], reverse=True)
     #print("Average fitness: " + str(average_fitness(beer_scores)))
     children = create_children(beers, best_beers_indices)
+    mutate_children(children)
     delete_bottom_beers(beers, best_beers_indices)
     beers = beers + children
     for beer in beers:
-        beer.mutate(MUTATE_CHANCE)
         beer.adjust()
+    if len(fitness_values) >= CONVERGENCE_REQUIREMENT:
+        if converged(fitness_values):
+            break
 
 print("Beginning fitness: " + str(fitness_values[0]))
 print("Median fitness:" + str(np.median(fitness_values)))
